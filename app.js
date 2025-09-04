@@ -1,27 +1,26 @@
 // Stock Count Pro — app.js (Pro)
 // Branding handled in CSS. App logic below.
 
+/ Stock Count Pro â€” app.js (auto-loader for items.js)
+
 const CFG_KEY = "pwa_cfg_v2";
 const ITEMS_KEY = "pwa_items_v2";
 const LINES_KEY = "pwa_lines_v2";
 
 let cfg = JSON.parse(localStorage.getItem(CFG_KEY) || "null") || { itemsUrl:"", countsUrl:"" };
 let items = JSON.parse(localStorage.getItem(ITEMS_KEY) || "null");
-let lines = JSON.parse(localStorage.getItem(LINES_KEY) || "[]");
 
-if (!items) {
-  items = [
-    { sku:"SKU-ESP-250", name:"Espresso Roast 250g", barcode:"", par:12 },
-    { sku:"SKU-GUA-250", name:"Guatemala 250g", barcode:"", par:8 },
-    { sku:"SKU-SYR-VAN-1L", name:"Vanilla Syrup 1L", barcode:"", par:6 },
-    { sku:"SKU-SYR-CAR-1L", name:"Caramel Syrup 1L", barcode:"", par:6 },
-    { sku:"SKU-CUPS-12", name:"Hot Cups 12oz (50)", barcode:"", par:20 },
-    { sku:"SKU-LIDS-12", name:"Hot Lids 12oz (50)", barcode:"", par:20 },
-    { sku:"SKU-MILK-2L", name:"Semi-Skimmed Milk 2L", barcode:"", par:10 },
-    { sku:"SKU-OAT-1L", name:"Oat Drink 1L", barcode:"", par:18 }
-  ];
+// Auto-load from items.js if not in localStorage yet
+if (!items && typeof ITEMS !== "undefined") {
+  items = ITEMS;
   saveItems();
 }
+
+let lines = JSON.parse(localStorage.getItem(LINES_KEY) || "[]");
+
+function saveCfg(){ localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); }
+function saveItems(){ localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); }
+function saveLines(){ localStorage.setItem(LINES_KEY, JSON.stringify(lines)); }
 
 function saveCfg(){ localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); renderSyncStatus(); }
 function saveItems(){ localStorage.setItem(ITEMS_KEY, JSON.stringify(items)); renderItems(searchEl.value); renderSummary(); }
